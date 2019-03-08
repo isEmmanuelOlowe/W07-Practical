@@ -7,8 +7,8 @@ public class W07Practical {
   * Allows user to perform quries on Restaurant dataset
   */
   public static void main(String[] args) {
-
-    if (args.length < 2){
+    System.out.println(System.getProperty("java.class.path"));
+    if (args.length >= 2){
       String dbFile = args[0];
       String operation = args[1];
       Database database = new Database(dbFile);
