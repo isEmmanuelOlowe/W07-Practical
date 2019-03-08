@@ -7,12 +7,12 @@ public class W07Practical {
   * Allows user to perform quries on Restaurant dataset
   */
   public static void main(String[] args) {
-    System.out.println(System.getProperty("java.class.path"));
-    if (args.length >= 2){
+
+    try {
+
       String dbFile = args[0];
       String operation = args[1];
       Database database = new Database(dbFile);
-
       //find the selected operation user wants to perform
       switch (operation) {
 
@@ -24,6 +24,11 @@ public class W07Practical {
         case "query5": database.query5(); break;
       }
       database.close();
+    }
+    catch (ArrayIndexOutOfBoundsException e) {
+
+      System.out.println("Usage: java -cp sqlite-jdbc.jar:. W07Practical <db_file> "
+      + "<action> [input_file | minimum_rating]");
     }
   }
 }
