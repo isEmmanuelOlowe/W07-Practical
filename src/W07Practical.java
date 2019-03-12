@@ -6,6 +6,8 @@ public class W07Practical {
 
   /**
   * Allows user to perform quries on Restaurant dataset.
+  *
+  * @param args arguments by user which determine actions of program
   */
   public static void main(String[] args) {
     String usage = "Usage: java -cp sqlite-jdbc.jar:. W07Practical <db_file> "
@@ -39,7 +41,7 @@ public class W07Practical {
 
       System.out.println(usage);
     }
-    
+
     //in event of SQL Error
     catch (SQLException e) {
 

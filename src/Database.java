@@ -98,7 +98,7 @@ public class Database {
   * @throws SQLException in even of an SQL Error
   */
   private void createView(String name, String query) throws SQLException {
-    String sql = "CREATE VIEW IF NOT EXISTS "+ name +" AS " + query;
+    String sql = "CREATE VIEW IF NOT EXISTS " + name + " AS " + query;
     executeUpdate(sql);
   }
 
@@ -118,18 +118,18 @@ public class Database {
 
     String[] line = sLine.split(",");
 
-    String sql = "INSERT INTO restaurant VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+    String sql = "INSERT INTO restaurant VALUES (?, ?, ?, ?)";
 
     PreparedStatement statement = this.connection.prepareStatement(sql);
     statement.setString(1, line[nameIndex]);
     statement.setString(2, line[cityIndex]);
     statement.setString(3, line[styleIndex]);
 
-    if (line[ratingIndex].isEmpty() || Double.parseDouble(line[ratingIndex]) < 0){
-      statement.setNull(5, 0);
+    if (line[ratingIndex].isEmpty() || Double.parseDouble(line[ratingIndex]) < 0) {
+      statement.setNull(4, 0);
     }
     else {
-      statement.setString(5, line[ratingIndex]);
+      statement.setString(4, line[ratingIndex]);
     }
 
     statement.executeUpdate();
@@ -147,7 +147,7 @@ public class Database {
     + "LIKE '%European%'and rating = 5";
     createView("[query1]", query1);
 
-    String query4 = "SELECT city, AVG(rating) AS average FROM restaurant GROUP BY city" ;
+    String query4 = "SELECT city, AVG(rating) AS average FROM restaurant GROUP BY city";
     createView("[query4]", query4);
 
     String query6 = "SELECT STDEV(rating) FROM restaurant";
@@ -194,8 +194,8 @@ public class Database {
     //Now insert for gettings rating
     statement.setDouble(1, Double.parseDouble(minimumRating));
     ResultSet resultSet = statement.executeQuery();
-    System.out.println("Total number of restaurants with rating above (or equal to) " +
-    minimumRating);
+    System.out.println("Total number of restaurants with rating above (or equal to) "
+    + minimumRating);
     System.out.println(resultSet.getInt("counter"));
     statement.close();
   }
@@ -243,7 +243,7 @@ public class Database {
     String sql = "SELECT city, min(rating) as minimum FROM restaurant GROUP BY city";
     Statement statement = this.connection.createStatement();
     ResultSet resultSet = statement.executeQuery(sql);
-    while (resultSet.next()){
+    while (resultSet.next()) {
       Statement statement2 = this.connection.createStatement();
       String sql2 = "SELECT city, name, rating FROM restaurant WHERE rating = "
       + resultSet.getDouble("minimum") + " and city = '" + resultSet.getString("city") + "'";
