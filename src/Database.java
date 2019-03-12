@@ -125,7 +125,7 @@ public class Database {
 
   private void createViews() throws SQLException {
     //A view for query1
-    String query1 = "SELECT city, name, cuisine, rating "
+    String query1 = "SELECT city, name, rating, cuisine "
     + "FROM restaurant WHERE (city = 'Edinburgh' or city = 'Amsterdam') and cuisine "
     + "LIKE '%European%'and rating = 5";
     createView("[query1]", query1);
@@ -208,6 +208,7 @@ public class Database {
   */
   public void query5() throws SQLException {
 
+    System.out.println("city, name, rating")
     String sql = "SELECT city, min(rating) as minimum FROM restaurant GROUP BY city";
     Statement statement = this.connection.createStatement();
     ResultSet resultSet = statement.executeQuery(sql);
