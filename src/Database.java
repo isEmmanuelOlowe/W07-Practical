@@ -115,20 +115,26 @@ public class Database {
     final int styleIndex = 3;
     final int ratingIndex = 5;
 
+    //database indexes being used
+    final int dNameIndex = 1;
+    final int dCityIndex = 2;
+    final int dStyleIndex = 3;
+    final int dRatingIndex = 4;
+
     String[] line = sLine.split(",");
 
     String sql = "INSERT INTO restaurant VALUES (?, ?, ?, ?)";
 
     PreparedStatement statement = this.connection.prepareStatement(sql);
-    statement.setString(1, line[nameIndex]);
-    statement.setString(2, line[cityIndex]);
-    statement.setString(3, line[styleIndex]);
+    statement.setString(dNameIndex, line[nameIndex]);
+    statement.setString(dCityIndex, line[cityIndex]);
+    statement.setString(dStyleIndex, line[styleIndex]);
 
     if (line[ratingIndex].isEmpty() || Double.parseDouble(line[ratingIndex]) < 0) {
-      statement.setNull(4, 0);
+      statement.setNull(dRatingIndex, 0);
     }
     else {
-      statement.setString(4, line[ratingIndex]);
+      statement.setString(dRatingIndex, line[ratingIndex]);
     }
 
     statement.executeUpdate();
