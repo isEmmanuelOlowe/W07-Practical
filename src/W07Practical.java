@@ -1,15 +1,16 @@
 import java.sql.SQLException;
 /**
-* Allows users to perform quries on Restaurant dataset
+* Allows users to perform quries on Restaurant dataset.
 */
 public class W07Practical {
 
   /**
-  * Allows user to perform quries on Restaurant dataset
+  * Allows user to perform quries on Restaurant dataset.
   */
   public static void main(String[] args) {
     String usage = "Usage: java -cp sqlite-jdbc.jar:. W07Practical <db_file> "
     + "<action> [input_file | minimum_rating]";
+
     try {
 
       String dbFile = args[0];
@@ -28,12 +29,20 @@ public class W07Practical {
         case "query7": database.query7(); break;
         default: System.out.println(usage);
       }
+
+      //closes connection to the database
       database.close();
     }
+
+    //in event incorrect command line arguments are given
     catch (ArrayIndexOutOfBoundsException e) {
+
       System.out.println(usage);
     }
+    
+    //in event of SQL Error
     catch (SQLException e) {
+
       System.out.println(e.getMessage());
     }
   }

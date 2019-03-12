@@ -10,46 +10,58 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DecimalFormat;
 /**
-* Allows the user to interact with the database
+* Allows the user to interact with the database.
 */
 public class Database {
 
-  //private String databaseURL;
+  //stores the connection
   private Connection connection = null;
+  //for formating of numbers
   private DecimalFormat decimalFormat;
+
   /**
-  * Adds the name of the database to
+  * Adds the name of the database to.
   *
-  * @param dbFile the location of database file
+  * @param dbFile the location of database file.
+  * @throws SQLException inevent of SQL Error.
   */
   public Database(String dbFile) throws SQLException {
+
+    //the pattern the number formating will follow
     String pattern = "##0.#";
     this.decimalFormat = new DecimalFormat(pattern);
     String databaseURL = "jdbc:sqlite:" + dbFile;
     this.connection = DriverManager.getConnection(databaseURL);
   }
+
   /**
-  * Creates new tables for the sql file using the provided csv file
+  * Creates new tables for the sql file using the provided csv file.
   *
-  * @param fileName the name of the file being used to created database.
+  * @param fileName the name of the file being used to created database entries.
+  * @throws SQLException in event of SQL Error.
   */
   public void create(String fileName) throws SQLException {
+
     try {
 
+      //deletes the table if it exists and create a new empty table
       String sql = "DROP TABLE IF EXISTS restaurant";
       String sql2 = "CREATE TABLE restaurant (name varchar(255), city varchar(255),"
       + " cuisine varchar(255), ranking INT, rating REAL,"
       + " priceRange varchar(255), reviewNo varchar(255), reviews varchar(255));";
       executeUpdate(sql);
       executeUpdate(sql2);
+
       // Add code to append on restaurants and cuisine styles
       BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
       //for ingnoring first line which is not a data entry
       String line = bufferedReader.readLine();
       this.connection.setAutoCommit(false);
-      while ((line = bufferedReader.readLine()) != null){
+      while ((line = bufferedReader.readLine()) != null) {
+
         this.addRow(line);
       }
+
       bufferedReader.close();
       createViews();
       this.connection.commit();
@@ -64,36 +76,45 @@ public class Database {
     }
   }
 
+
+  /**
+  * Creates a statement which runs SQL for an Update to database.
+  *
+  * @param sql the sql being run on.
+  * @throws SQLException in the event of an SQL Error.
+  */
   private void executeUpdate(String sql) throws SQLException {
+
       Statement statement = this.connection.createStatement();
       statement.executeUpdate(sql);
       statement.close();
   }
 
+  /**
+  * Create a new SQL view.
+  *
+  * @param name the name of the view
+  * @param query the query which will be set as the view
+  * @throws SQLException in even of an SQL Error
+  */
   private void createView(String name, String query) throws SQLException {
     String sql = "CREATE VIEW IF NOT EXISTS "+ name +" AS " + query;
     executeUpdate(sql);
   }
 
   /**
-  * Adds a row of data to the database
+  * Adds a row of data to the database.
   *
   * @param line the unformatted line of data
+  * @throws SQLException in event of SQL Error
   */
   private void addRow(String sLine) throws SQLException {
 
-    //The various index locations of the labels in the data
-    //final int numberIndex = 0;
+    //The indexes of the required data
     final int nameIndex = 1;
     final int cityIndex = 2;
     final int styleIndex = 3;
-    final int rankingIndex = 4;
     final int ratingIndex = 5;
-    final int priceRangeIndex = 6;
-    final int reviewNoIndex = 7;
-    final int reviewsIndex = 8;
-    //final int urlTaIndex = 9;
-    //final int idTaIndex = 10;
 
     String[] line = sLine.split(",");
 
@@ -103,12 +124,6 @@ public class Database {
     statement.setString(1, line[nameIndex]);
     statement.setString(2, line[cityIndex]);
     statement.setString(3, line[styleIndex]);
-    if (line[rankingIndex].isEmpty() || Double.parseDouble(line[rankingIndex]) < 0){
-      statement.setNull(4, 0);
-    }
-    else{
-      statement.setString(4, line[rankingIndex]);
-    }
 
     if (line[ratingIndex].isEmpty() || Double.parseDouble(line[ratingIndex]) < 0){
       statement.setNull(5, 0);
@@ -116,13 +131,15 @@ public class Database {
     else {
       statement.setString(5, line[ratingIndex]);
     }
-    statement.setString(6, line[priceRangeIndex]);
-    statement.setString(7, line[reviewNoIndex]);
-    statement.setString(8, line[reviewsIndex]);
+
     statement.executeUpdate();
     statement.close();
   }
 
+
+  /**
+  * Creates all the views the database will contain.
+  */
   private void createViews() throws SQLException {
     //A view for query1
     String query1 = "SELECT city, name, rating, cuisine "
@@ -141,6 +158,12 @@ public class Database {
 
   }
 
+  /**
+  * Gets a view from database and prints it to terminal.
+  *
+  * @param name the view being accessed.
+  * @throws SQLException in the event of an SQL Error.
+  */
   private void getView(String name) throws SQLException {
     String query = "SELECT * FROM " + name;
     executeQuery(query);
@@ -149,6 +172,8 @@ public class Database {
   /**
   * Lists the city, name, rating and cuisine style for the best rated resutaurants
   in Amsterdam and Edinbrugh (with rating 5) which serve European Cuisine.
+  *
+  * @throws SQLException in the event of an SQL Error.
   */
   public void query1() throws SQLException {
 
@@ -161,6 +186,7 @@ public class Database {
   the provided minimum rating.
   *
   * @param minimumRating the search boundary for which restaurants which meet shall be selected
+  * @throws SQLException in the event of an SQL Error
   */
   public void query2(String minimumRating) throws SQLException {
 
@@ -179,6 +205,7 @@ public class Database {
   with a rating greater or equal to the provided minimum rating.
   *
   * @param minimumRating the search boundary for which resturatns which meet shall be selected
+  * @throws SQLException in the event of an SQL Error
   */
   public void query3(String minimumRating) throws SQLException {
 
@@ -194,7 +221,9 @@ public class Database {
 
   /**
   * prints out a table, containing for each city, the city and average rating of
-  restaurants in that city
+  restaurants in that city.
+  *
+  * @throws SQLException in the event of an SQL Error.
   */
   public void query4() throws SQLException {
 
@@ -205,6 +234,8 @@ public class Database {
   /**
   * For each city prints out the restaurant with the lowest rating: the city name,
   the restaurant name and the rating.
+  *
+  * @throws SQLException in the event of an SQL Error.
   */
   public void query5() throws SQLException {
 
@@ -223,18 +254,29 @@ public class Database {
     statement.close();
   }
 
+  /**
+  * Prints out the standard deviation of all the ratings in the database.
+  *
+  * @throws SQLException in the event of an SQL Error.
+  */
   public void query6() throws SQLException {
     System.out.println("Standard Deviation of Rating");
     getView("[query6]");
   }
 
+
+  /**
+  * Prints out the standard deviation of all rating for each city.
+  *
+  * @throws SQLException in the event of an SQL Error.
+  */
   public void query7() throws SQLException {
     System.out.println("City, Standard Deviation of Rating");
     getView("[query7]");
   }
 
 /**
-* Executes a query and prints its result set
+* Executes a query and prints its result set.
 *
 * @param sql the query being executed
 * @throws SQLException in the event of an SQL error
@@ -248,7 +290,7 @@ public class Database {
   }
 
   /**
-  * prints a result set with columns seperate by commas
+  * prints a result set with columns seperate by commas.
   *
   * @param resultSet the result set being printed
   * @throws SQLException in event of SQL Error
@@ -279,7 +321,7 @@ public class Database {
   }
 
   /**
-  * closes the connection to the database
+  * closes the connection to the database.
   *
   * @throws SQLException in the event of an SQL Error
   */
