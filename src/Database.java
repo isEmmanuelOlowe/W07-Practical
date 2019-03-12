@@ -47,7 +47,7 @@ public class Database {
       //deletes the table if it exists and create a new empty table
       String sql = "DROP TABLE IF EXISTS restaurant";
       String sql2 = "CREATE TABLE restaurant (name varchar(255), city varchar(255),"
-      + " cuisine varchar(255), rating REAL";
+      + " cuisine varchar(255), rating REAL)";
       executeUpdate(sql);
       executeUpdate(sql2);
 
