@@ -208,7 +208,7 @@ public class Database {
   */
   public void query5() throws SQLException {
 
-    System.out.println("city, name, rating")
+    System.out.println("city, name, rating");
     String sql = "SELECT city, min(rating) as minimum FROM restaurant GROUP BY city";
     Statement statement = this.connection.createStatement();
     ResultSet resultSet = statement.executeQuery(sql);
