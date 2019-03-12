@@ -26,8 +26,6 @@ public class W07Practical {
         case "query5": database.query5(); break;
         case "query6": database.query6(); break;
         case "query7": database.query7(); break;
-        case "query8": database.query8(); break;
-        case "query9": database.query9(); break;
         default: System.out.println(usage);
       }
       database.close();
