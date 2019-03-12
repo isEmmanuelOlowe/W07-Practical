@@ -130,13 +130,13 @@ public class Database {
     + "LIKE '%European%'and rating = 5";
     createView("[query1]", query1);
 
-    String query4 = "SELECT city,ROUND(AVG(rating), 1) AS average FROM restaurant GROUP BY city" ;
+    String query4 = "SELECT city, AVG(rating) AS average FROM restaurant GROUP BY city" ;
     createView("[query4]", query4);
 
-    String query6 = "SELECT ROUND(STDEV(rating), 2) FROM restaurant";
+    String query6 = "SELECT STDEV(rating) FROM restaurant";
     createView("[query6]", query6);
 
-    String query7 = "SELECT city, ROUND(STDEV(rating), 2) FROM restaurant GROUP BY city";
+    String query7 = "SELECT city, STDEV(rating) FROM restaurant GROUP BY city";
     createView("[query7]", query7);
 
   }
