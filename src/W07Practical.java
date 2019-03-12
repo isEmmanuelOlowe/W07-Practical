@@ -1,3 +1,4 @@
+import java.sql.SQLException;
 /**
 * Allows users to perform quries on Restaurant dataset
 */
@@ -7,7 +8,8 @@ public class W07Practical {
   * Allows user to perform quries on Restaurant dataset
   */
   public static void main(String[] args) {
-
+    String usage = "Usage: java -cp sqlite-jdbc.jar:. W07Practical <db_file> "
+    + "<action> [input_file | minimum_rating]";
     try {
 
       String dbFile = args[0];
@@ -22,13 +24,19 @@ public class W07Practical {
         case "query3": database.query3(args[2]); break;
         case "query4": database.query4(); break;
         case "query5": database.query5(); break;
+        case "query6": database.query6(); break;
+        case "query7": database.query7(); break;
+        case "query8": database.query8(); break;
+        case "query9": database.query9(); break;
+        default: System.out.println(usage);
       }
       database.close();
     }
     catch (ArrayIndexOutOfBoundsException e) {
-
-      System.out.println("Usage: java -cp sqlite-jdbc.jar:. W07Practical <db_file> "
-      + "<action> [input_file | minimum_rating]");
+      System.out.println(usage);
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
     }
   }
 }
