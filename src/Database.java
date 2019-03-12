@@ -16,15 +16,15 @@ public class Database {
 
   //private String databaseURL;
   private Connection connection = null;
-  //private DecimalFormat decimalFormat;
+  private DecimalFormat decimalFormat;
   /**
   * Adds the name of the database to
   *
   * @param dbFile the location of database file
   */
   public Database(String dbFile) throws SQLException {
-    //String pattern = "##0.#";
-    //String decimalFormat = new DecimalFormat(pattern);
+    String pattern = "##0.#";
+    this.decimalFormat = new DecimalFormat(pattern);
     String databaseURL = "jdbc:sqlite:" + dbFile;
     this.connection = DriverManager.getConnection(databaseURL);
   }
@@ -261,8 +261,14 @@ public class Database {
 
       String output = "";
       for (int i = 1; i <= columnNumber; i++) {
+        try {
+          output += this.decimalFormat.format(Double.parseDouble(resultSet.getString(i))) + ", ";
+        }
+        catch (NumberFormatException e) {
+          output += resultSet.getString(i) + ", ";
 
-        output += resultSet.getString(i) + ", ";
+        }
+
       }
 
       //to remove extra comma and space
