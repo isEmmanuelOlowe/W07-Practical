@@ -46,7 +46,7 @@ public class Database {
 
       //deletes the table if it exists and create a new empty table
       String sql = "DROP TABLE IF EXISTS restaurant";
-      String sql2 = "CREATE TABLE restaurant (name varchar(255), city varchar(255),"
+      String sql2 = "CREATE TABLE restaurant (number int, name varchar(255), city varchar(255),"
       + " cuisine varchar(255), rating REAL)";
       executeUpdate(sql);
       executeUpdate(sql2);
@@ -110,25 +110,36 @@ public class Database {
   private void addRow(String sLine) throws SQLException {
 
     //The indexes of the required data
+    final int numberIndex = 0;
     final int nameIndex = 1;
     final int cityIndex = 2;
     final int styleIndex = 3;
     final int ratingIndex = 5;
 
     //database indexes being used
-    final int dNameIndex = 1;
-    final int dCityIndex = 2;
-    final int dStyleIndex = 3;
-    final int dRatingIndex = 4;
+    final int dNumberIndex= 1;
+    final int dNameIndex = 2;
+    final int dCityIndex = 3;
+    final int dStyleIndex = 4;
+    final int dRatingIndex = 5;
 
     String[] line = sLine.split(",");
 
-    String sql = "INSERT INTO restaurant VALUES (?, ?, ?, ?)";
+    String sql = "INSERT INTO restaurant VALUES (?, ?, ?, ?, ?)";
 
     PreparedStatement statement = this.connection.prepareStatement(sql);
+    statement.setString(dNumberIndex, line[numberIndex]);
     statement.setString(dNameIndex, line[nameIndex]);
     statement.setString(dCityIndex, line[cityIndex]);
-    statement.setString(dStyleIndex, line[styleIndex]);
+
+    if (line[styleIndex].isEmpty()) {
+
+      statement.setNull(dStyleIndex, 0);
+    }
+    else {
+
+      statement.setString(dStyleIndex, line[styleIndex]);
+    }
 
     if (line[ratingIndex].isEmpty() || Double.parseDouble(line[ratingIndex]) < 0) {
       statement.setNull(dRatingIndex, 0);
