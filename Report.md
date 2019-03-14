@@ -37,7 +37,11 @@ Is a virtual table which is based on result set created from a SQL query. This c
 SELECT * FROM view
 ```
 
-queries to get the desired result where `view` is the table which represents the desired result set. This simplifies the query command and allows others who are using the program to still get the results for certain queries without having to run them in the program.
+queries to get the desired result where `view` is the table which represents the desired result set. This simplifies the query command and allows others who are using the program to still get the results for certain queries without having to run them in the program. Also it means when a user enters for a specific query to be obtained that only a command which gets the query name from the database needs to be ran. e.g.
+
+```sql
+SELECT * FROM query1
+```
 
 ### STDEV
 
@@ -59,7 +63,7 @@ This is a statistical aggregate function which find the deviation from mean in a
 
 It was decided to make the connection a private variable of the Database class. This design decision was chosen to allow for the use of the same connection to the database used across any of the `query*` methods without having to create a connection to the database in every single method. So instead the connection is opened in the constructor of the Database class and closed with the `close` method. 
 
-It was decided to implement: `query1`, `query4`, `query6`, `query7` as views in the SQL database. this allowed for the generalisation of behaviours in to functions e.g. `getViews()`. These queries were the optimal to implement as views since they did not require input from the user so it would be easy to make a view which represents the data they contain.
+It was decided to implement: `query1`, `query4`, `query6`, `query7` as views in the SQL database. this allowed for the generalisation of behaviours in to functions e.g. `getViews()`. These queries were the optimal to implement as views since they did not require input from the user so it would be easy to make a view which represents the data they contain. A view was not made for `query5` as it was implemented as two as the query was too slow (discussed further in evaluation), instead it was implemented in two queries with additional java code.
 
 Through the program when a string or concatenation  gets too long involving the concatenation of string, concatenation is taken onto a new line to maintain the readability.  e.g.
 

@@ -117,7 +117,7 @@ public class Database {
     final int ratingIndex = 5;
 
     //database indexes being used
-    final int dNumberIndex= 1;
+    final int dNumberIndex = 1;
     final int dNameIndex = 2;
     final int dCityIndex = 3;
     final int dStyleIndex = 4;
@@ -126,7 +126,7 @@ public class Database {
     String[] line = sLine.split(",");
 
     String sql = "INSERT INTO restaurant VALUES (?, ?, ?, ?, ?)";
-
+    //addeds the valies to the corresponding question mark
     PreparedStatement statement = this.connection.prepareStatement(sql);
     statement.setString(dNumberIndex, line[numberIndex]);
     statement.setString(dNameIndex, line[nameIndex]);
